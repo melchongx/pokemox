@@ -18,7 +18,7 @@ const Nav = () => {
 
   return (
     <nav className="flex items-center">
-      <ul className="flex space-x-4 uppercase items-center">
+      <ul className="flex items-center space-x-4 uppercase">
         {paths.map((path) => (
           <li key={path.href}>
             <NavLink href={path.href} text={path.text} />

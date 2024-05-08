@@ -1,16 +1,14 @@
 const Footer = () => {
   return (
-    <footer className="bg-amber-200">
-      <h1>The Pokemox Corporation</h1>
-
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque, enim
-        odio ipsam fuga aut quod, quidem dicta iste neque vitae saepe sit error
-        ducimus necessitatibus. Consectetur doloremque expedita, quos sit neque
-        optio architecto, natus vero, iste totam recusandae laborum minima?
-        Repellat ea fugiat inventore itaque distinctio iusto provident impedit
-        aspernatur nobis ipsa!
-      </p>
+    <footer className="bg-[#ffaf61] px-12 py-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-2">
+        <h1 className="text-2xl font-bold">The Pokemox Corporation</h1>
+        <p className="font-poppins">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aspernatur
+          eaque sapiente voluptates exercitationem aperiam consectetur,
+          obcaecati nihil expedita quisquam modi?
+        </p>
+      </div>
     </footer>
   );
 };
