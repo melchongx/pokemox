@@ -14,12 +14,14 @@ const PokemonStats = ({stats}) => {
   }
 
   useEffect(() => {
+    let statsChart;
+
     Chart.register(BarController, CategoryScale, LinearScale, BarElement)
 
     if (chartRef.current && stats) {
       const ctx = chartRef.current.getContext("2d");
 
-      new Chart(ctx, {
+      statsChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: stats.map(stat => formatStatName(stat.stat.name)),
@@ -55,6 +57,12 @@ const PokemonStats = ({stats}) => {
           },
         },
       })
+    }
+
+    return () => {
+      if (statsChart) {
+        statsChart.destroy()
+      }
     }
   }, [stats])
 
