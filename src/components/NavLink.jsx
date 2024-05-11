@@ -4,7 +4,7 @@ const NavLink = ({ href, text }) => {
   return (
     <ReactRouterNavLink
       to={href}
-      className={({ isActive }) => isActive && "font-bold"}
+      className={({ isActive }) => isActive ? "font-bold" : undefined}
     >
       {text}
     </ReactRouterNavLink>
