@@ -1,17 +1,15 @@
 //https://pokeapi.co/api/v2/{endpoint}/ = pokeApi
 
-export async function tite() {
-  const url = "https://pokeapi.co/api/v2/";
+export async function PokedexCall() {
+  const pokemons = [];
+  let url = "https://pokeapi.co/api/v2/pokemon?limit=1025";
 
-  try {
+  while (url) {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
     const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
+    pokemons.push(...data.results);
+    url = data.next;
   }
+
+  return pokemons;
 }
