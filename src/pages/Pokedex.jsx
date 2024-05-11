@@ -65,7 +65,7 @@ const Pokedex = () => {
       <div className="flex w-full flex-row flex-wrap justify-center">
         {pokemons.map((pokemon) => (
           <div
-            className="m-2 h-60 w-1/5 rounded-xl border border-neutral-600"
+            className="m-2 h-60 w-1/6 rounded-xl border border-neutral-600"
             key={pokemon.name}
           >
             {/* <img
