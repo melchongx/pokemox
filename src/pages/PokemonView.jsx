@@ -106,9 +106,21 @@ const PokemonView = () => {
                 <h1 className="text-3xl font-bold capitalize">
                   {pokemon.name}
                 </h1>
-                <h1 className="text-xl font-bold">
+                <h1 className="text-xl font-bold mb-2">
                   #{species.id}
                 </h1>
+
+                {species.is_legendary && (
+                  <h1 className="bg-yellow-600 px-2 inline-block rounded font-bold text-white">
+                    Legendary
+                  </h1>
+                )}
+
+                {species.is_mythical && (
+                  <h1 className="bg-purple-600 px-2 inline-block rounded font-bold text-white">
+                    Mythical
+                  </h1>
+                )}
               </div>
 
               <p className="mb-8">
