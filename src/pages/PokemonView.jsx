@@ -45,7 +45,7 @@ const PokemonView = () => {
     }
     
     fetchPokemonSpecies();
-  }, [pokemon.id, pokemon.species.url]);
+  }, [pokemon.id]);
 
   useEffect(() => {
     // Fetch Pokemon Type's Weaknesses
