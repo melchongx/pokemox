@@ -16,8 +16,8 @@ export async function PokedexCall() {
   return pokemons;
 }
 
-export async function GetPokemon(name) {
-  const response = await fetch(baseUrl + `pokemon/${name}`);
+export async function GetPokemon(nameOrId) {
+  const response = await fetch(baseUrl + `pokemon/${nameOrId}`);
 
   if (!response.ok) {
     throw new Error("Error fetching Pokémon data");
@@ -27,8 +27,8 @@ export async function GetPokemon(name) {
 }
 
 // https://pokeapi.co/docs/v2#pokemon-species
-export async function GetPokemonSpecies(id) {
-  const response = await fetch(baseUrl + `pokemon-species/${id}`);
+export async function GetPokemonSpecies(url) {
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error("Error fetching Pokémon Species data");
