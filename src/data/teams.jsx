@@ -1,0 +1,3 @@
+let teams = [];
+
+export {teams}
