@@ -1,5 +1,7 @@
 //https://pokeapi.co/api/v2/{endpoint}/ = pokeApi
 
+import { generateRandomPokemonId } from "../helpers";
+
 const baseUrl = "https://pokeapi.co/api/v2/";
 
 export async function PokedexCall() {
@@ -14,6 +16,25 @@ export async function PokedexCall() {
   }
 
   return pokemons;
+}
+
+export async function fetchPokemonData() {
+  const promises = [];
+  for (let i = 1; i <= 8; i++) {
+    const id = generateRandomPokemonId();
+    promises.push(fetch(`${baseUrl}pokemon/${id}`));
+  }
+
+  try {
+    const responseArr = await Promise.all(promises);
+    const pokemonDataArr = await Promise.all(
+      responseArr.map(async (res) => await res.json()),
+    );
+    return pokemonDataArr;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error while fetching pokemonData: ${error.message}`);
+  }
 }
 
 export async function GetPokemon(nameOrId) {
