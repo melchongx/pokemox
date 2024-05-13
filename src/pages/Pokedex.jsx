@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchPokemonData } from "../api/api";
+import { sortPokemonData } from "../helpers";
 
 import FilterMenu from "../components/FilterMenu";
 import ChevronIcon from "../components/ChevronIcon";
@@ -11,6 +12,9 @@ const Pokedex = () => {
   const [pokemonData, setPokemonData] = useState([]);
   const [filterVariant, setFilterVariant] = useState("simple");
   const [loading, setLoading] = useState(true);
+
+  // query states
+  const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,17 +28,29 @@ const Pokedex = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const updated = sortPokemonData([...pokemonData], sortQuery);
+    setPokemonData(updated);
+  }, [sortQuery]);
+
   const handleClear = async () => {
+    setPokemonData([]);
     setLoading(true);
     const data = await fetchPokemonData();
-    setPokemonData(data);
+    setPokemonData(() => {
+      const updated = sortPokemonData([...data], sortQuery);
+      return updated;
+    });
     setLoading(false);
   };
 
   const handleLoadMoreClick = async () => {
     setLoading(true);
     const data = await fetchPokemonData();
-    setPokemonData((prev) => [...prev, ...data]);
+    setPokemonData((prev) => {
+      const updated = sortPokemonData([...prev, ...data], sortQuery);
+      return updated;
+    });
     setLoading(false);
   };
 
@@ -42,7 +58,12 @@ const Pokedex = () => {
     <div className="flex flex-col items-center gap-8">
       <h1 className="text-3xl font-bold uppercase italic">Pokedex</h1>
 
-      <FilterMenu variant={filterVariant} onClear={handleClear} />
+      <FilterMenu
+        variant={filterVariant}
+        onClear={handleClear}
+        sortQuery={sortQuery}
+        setSortQuery={setSortQuery}
+      />
 
       <div className="w-full">
         <div className="flex items-center justify-center">

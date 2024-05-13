@@ -5,10 +5,9 @@ import DropdownMenu from "./DropdownMenu";
 import FilterRow from "./FilterRow";
 import Button from "./Button";
 
-const FilterMenu = ({ variant, onClear }) => {
+const FilterMenu = ({ variant, onClear, sortQuery, setSortQuery }) => {
   const [typeQuery, setTypeQuery] = useState(null);
   const [numberQuery, setNumberQuery] = useState({ start: 1, end: 1025 });
-  const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
 
   const handleNumberChange = (number, field = "start") => {
     if (number < 1 || number > 1025) {
