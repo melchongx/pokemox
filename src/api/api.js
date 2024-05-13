@@ -4,7 +4,7 @@ import { generateRandomPokemonId } from "../helpers";
 
 const baseUrl = "https://pokeapi.co/api/v2/";
 
-export async function PokedexCall() {
+export async function getAllPokemons() {
   const pokemons = [];
   let url = baseUrl + "pokemon?limit=1025";
 
