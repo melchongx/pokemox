@@ -5,10 +5,10 @@ import DropdownMenu from "./DropdownMenu";
 import FilterRow from "./FilterRow";
 import Button from "./Button";
 
-const FilterMenu = ({ variant }) => {
+const FilterMenu = ({ variant, onClear }) => {
   const [typeQuery, setTypeQuery] = useState(null);
   const [numberQuery, setNumberQuery] = useState({ start: 1, end: 1025 });
-  const [sortQuery, setSortQuery] = useState("name");
+  const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
 
   const handleNumberChange = (number, field = "start") => {
     if (number < 1 || number > 1025) {
@@ -26,7 +26,10 @@ const FilterMenu = ({ variant }) => {
     return (
       <div className="w-full max-w-2xl text-stone-700">
         <div className="flex flex-wrap justify-center gap-x-10 gap-y-2 min-[667px]:justify-between">
-          <Button className="flex max-w-[384px] flex-1 items-center gap-2 min-[667px]:w-auto min-[667px]:flex-none">
+          <Button
+            className="flex max-w-[384px] flex-1 items-center gap-2 min-[667px]:w-auto min-[667px]:flex-none"
+            onClick={onClear}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,7 +44,7 @@ const FilterMenu = ({ variant }) => {
                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
               />
             </svg>
-            <span className="uppercase">Random</span>
+            <span className="uppercase">Clear</span>
           </Button>
           <div className="flex max-w-[384px] gap-x-6">
             <label
