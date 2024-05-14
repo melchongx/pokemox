@@ -4,7 +4,7 @@ import { generateRandomPokemonId } from "../helpers";
 
 const baseUrl = "https://pokeapi.co/api/v2/";
 
-export async function PokedexCall() {
+export async function getAllPokemons() {
   const pokemons = [];
   let url = baseUrl + "pokemon?limit=1025";
 
@@ -35,6 +35,36 @@ export async function fetchPokemonData() {
     console.error(error);
     throw new Error(`Error while fetching pokemonData: ${error.message}`);
   }
+}
+
+export async function fetchAllPokemonData() {
+  const promises = [];
+  for (let i = 1; i <= 10; i++) {
+    promises.push(fetch(`${baseUrl}pokemon/${i}`));
+  }
+
+  try {
+    const responseArr = await Promise.all(promises);
+    const pokemonDataArr = await Promise.all(
+      responseArr.map(async (res) => await res.json()),
+    );
+    return pokemonDataArr;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error while fetching pokemonData: ${error.message}`);
+  }
+}
+
+export async function GetPaginatedPokemonList(offset = 20) {
+  const response = await fetch(
+    baseUrl + `pokemon?offset=${offset}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Error fetching Pokémon list");
+  }
+
+  return response.json();
 }
 
 export async function GetPokemon(nameOrId) {

@@ -1,4 +1,8 @@
+import { useSearchContext } from "../helpers/searchContext";
+
 const Search = () => {
+  const { setSearchQuery } = useSearchContext();
+
   return (
     <div className="relative flex items-center">
       <svg
@@ -19,7 +23,8 @@ const Search = () => {
       <input
         type="text"
         placeholder="SEARCH FOR POKEMON"
-        className="rounded-2xl border-2 border-[#31241e] bg-transparent px-12 py-2 text-center text-[#31241e] placeholder:text-[#31241e60]"
+        className="lg:text-md rounded-2xl border-2 border-[#31241e] bg-transparent px-12 py-2 text-center  text-[#31241e] placeholder:text-[#31241e60] sm:text-sm"
+        onChange={(e) => setSearchQuery(e.target.value)}
       />
     </div>
   );

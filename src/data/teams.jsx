@@ -1,3 +1,4 @@
 let teams = [];
+let pokemons = [];
 
-export {teams}
+export { teams, pokemons };

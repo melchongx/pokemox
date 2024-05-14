@@ -1,26 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { GetPokemon, GetPokemonSpecies } from "../api/api.js";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import PokemonType from "../components/PokemonType.jsx";
 import PokemonStats from "../components/PokemonStats.jsx";
 import PokemonNav from "../components/PokemonNav.jsx";
 
 const PokemonView = () => {
-  const [pokemon, setPokemon] = useState([]);
+  const [inputPokemon, setInputPokemon] = useState([]);
   const [species, setSpecies] = useState([]);
   const [weaknesses, setWeaknesses] = useState([]);
   const [fetchError, setFetchError] = useState({
     pokemon: false,
     species: false,
   });
-  const { slug } = useParams();
+
+  const location = useLocation();
+  const receivedData = location.state?.pokemon;
+
+  const memoizedInputPokemon = useMemo(() => receivedData, [receivedData]);
 
   useEffect(() => {
     // Fetch pokemon
     const fetchPokemon = async () => {
       try {
-        const response = await GetPokemon(slug);
-        setPokemon(response);
+        const response = await GetPokemon(memoizedInputPokemon.id);
+        setInputPokemon(response);
       } catch (error) {
         console.error("Error fetching Pokémon data:", error);
         setFetchError(true);
@@ -28,15 +32,15 @@ const PokemonView = () => {
     };
 
     fetchPokemon();
-  }, [slug]);
+  }, [memoizedInputPokemon]);
 
   useEffect(() => {
     // Fetch Pokemon Species
     const fetchPokemonSpecies = async () => {
-      if (!pokemon.id) return;
+      if (!inputPokemon.id) return;
 
       try {
-        const response = await GetPokemonSpecies(pokemon.species.url);
+        const response = await GetPokemonSpecies(inputPokemon.species.url);
         setSpecies(response);
       } catch (error) {
         console.error("Error fetching Pokémon Species data:", error);
@@ -45,14 +49,14 @@ const PokemonView = () => {
     };
 
     fetchPokemonSpecies();
-  }, [pokemon.id]);
+  }, [inputPokemon.id]);
 
   useEffect(() => {
     // Fetch Pokemon Type's Weaknesses
     const fetchPokemonTypeWeaknesses = async () => {
-      if (!pokemon.types) return;
+      if (!inputPokemon.types) return;
 
-      const typePromises = pokemon.types.map(async ({ type }) => {
+      const typePromises = inputPokemon.types.map(async ({ type }) => {
         const typeResponse = await fetch(type.url);
         return typeResponse.json();
       });
@@ -69,7 +73,7 @@ const PokemonView = () => {
     };
 
     fetchPokemonTypeWeaknesses();
-  }, [pokemon]);
+  }, [inputPokemon]);
 
   const sanitizeFlavorText = (text) => {
     if (!text) return;
@@ -95,10 +99,10 @@ const PokemonView = () => {
         <div>Error fetching Pokémon data</div>
       ) : (
         <>
-          {pokemon && (
+          {inputPokemon && (
             <PokemonNav
               currentId={species.id}
-              isBaseForm={pokemon.is_default}
+              isBaseForm={inputPokemon.is_default}
             />
           )}
 
@@ -106,16 +110,18 @@ const PokemonView = () => {
             <div className="">
               <img
                 className="mb-8 w-[400px] rounded-md bg-[#D1C8C1] p-5"
-                src={pokemon.sprites?.other["official-artwork"].front_default}
-                alt={pokemon.name}
+                src={
+                  inputPokemon.sprites?.other["official-artwork"].front_default
+                }
+                alt={inputPokemon.name}
               />
 
-              <PokemonStats stats={pokemon.stats} />
+              <PokemonStats stats={inputPokemon.stats} />
             </div>
             <div>
               <div className="mb-5">
                 <h1 className="text-3xl font-bold capitalize">
-                  {pokemon.name}
+                  {inputPokemon.name}
                 </h1>
                 <h1 className="mb-2 text-xl font-bold">#{species.id}</h1>
 
@@ -144,11 +150,11 @@ const PokemonView = () => {
                 <div className="grid w-9/12 grid-cols-2 gap-4">
                   <div>
                     <p className="mb-1 font-bold">Height: </p>
-                    <p className="mb-0">{pokemon.height / 10} m</p>
+                    <p className="mb-0">{inputPokemon.height / 10} m</p>
                   </div>
                   <div>
                     <p className="mb-1 font-bold">Weight: </p>
-                    <p className="mb-0">{pokemon.weight / 10} kg</p>
+                    <p className="mb-0">{inputPokemon.weight / 10} kg</p>
                   </div>
                   <div>
                     <p className="mb-1 font-bold">Category: </p>
@@ -163,7 +169,9 @@ const PokemonView = () => {
                   <div>
                     <p className="mb-1 font-bold">Abilities: </p>
                     <p className="mb-0">
-                      {pokemon.abilities?.map((i) => i.ability.name).join(", ")}
+                      {inputPokemon.abilities
+                        ?.map((i) => i.ability.name)
+                        .join(", ")}
                     </p>
                   </div>
                 </div>
@@ -189,7 +197,7 @@ const PokemonView = () => {
 
               <div className="mb-5">
                 <h1 className="mb-3 text-xl font-bold uppercase">Type</h1>
-                {pokemon.types?.map((type) => (
+                {inputPokemon.types?.map((type) => (
                   <PokemonType
                     key={type.type.name}
                     type={type.type.name}

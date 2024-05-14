@@ -16,3 +16,20 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.flicking-viewport {
+  overflow: hidden;
+}
+
+.flicking-camera {
+  display: flex;
+}
+
+.flicking-camera .panel {
+  width: 350px;
+  transition: 0.1s;
+}
+
+.flicking-camera .active .panel {
+  width: 400px;
+}
