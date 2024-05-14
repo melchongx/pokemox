@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@egjs/flicking-plugins": "^4.7.1",
+    "@egjs/react-flicking": "^4.11.2",
     "@headlessui/react": "^2.0.3",
     "chart.js": "^4.4.2",
     "react": "^18.2.0",
