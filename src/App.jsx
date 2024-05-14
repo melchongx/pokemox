@@ -31,7 +31,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="/pokedex" element={<Pokedex />} />
             <Route path="/poketeams" element={<Poketeams />} />
-            <Route path="/pokedex/:slug" element={<PokemonView />} />
+            <Route path="/pokedex/pokemonview" element={<PokemonView />} />
             <Route path="/createteam" element={<CreateTeam />} />
           </Route>
         </Routes>

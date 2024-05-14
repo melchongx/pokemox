@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { GetPaginatedPokemonList, GetPokemon } from "../api/api";
 import { sortPokemonData } from "../helpers";
 import { useSearchContext } from "../helpers/searchContext";
+import { useNavigate } from "react-router-dom";
 
 import FilterMenu from "../components/FilterMenu";
 import ChevronIcon from "../components/ChevronIcon";
@@ -32,6 +33,8 @@ const Pokedex = () => {
       });
     });
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isListFetched.current) return;
@@ -106,7 +109,15 @@ const Pokedex = () => {
       <div className="flex w-full max-w-4xl flex-wrap justify-center gap-2 pt-4">
         {pokemonData.length > 0 &&
           pokemonData.map((pokemon) => (
-            <Card pokemon={pokemon} key={pokemon.id} />
+            <a
+              className="hover:cursor-pointer"
+              onClick={() => {
+                navigate("/pokedex/pokemonview", { state: { pokemon } });
+              }}
+              key={pokemon.id}
+            >
+              <Card pokemon={pokemon} />
+            </a>
           ))}
       </div>
 
