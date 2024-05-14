@@ -1,6 +1,6 @@
 import { teams } from "../data/teams";
 import { useState, useEffect } from "react";
-import PokemonCard from "../components/PokemonCard";
+import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
 
 function isTeamsEmpty() {
@@ -13,6 +13,9 @@ function isTeamsEmpty() {
 
 const Poketeams = () => {
   const [pokemonData, setPokemonData] = useState([]);
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,6 +41,15 @@ const Poketeams = () => {
 
   const handleCreateClick = () => {
     navigate("/CreateTeam");
+  };
+
+  const handleDeleteTeam = (teamNameToDelete) => {
+    const teamIndex = teams.findIndex((team) => team.name === teamNameToDelete);
+    if (teamIndex !== -1) {
+      teams.splice(teamIndex, 1); // Remove the team directly from the array
+      // Trigger re-render
+      setPokemonData([...pokemonData]);
+    }
   };
 
   return (
@@ -69,18 +81,58 @@ const Poketeams = () => {
                 <h3 className="mx-3 w-5/6 text-lg font-semibold italic">
                   {teamName}
                 </h3>
-                <button className="mx-2 w-24 rounded-xl bg-blue-500 px-3 py-1 font-semibold shadow-md transition-all duration-200 hover:bg-[#ffcd93]">
+                <button
+                  className="mx-2 w-24 rounded-xl bg-blue-500 px-3 py-1 font-semibold shadow-md transition-all duration-200 hover:bg-[#ffcd93]"
+                  onClick={() => setIsEditing(true)}
+                >
                   EDIT
                 </button>
-                <button className="mx-2 w-24 rounded-xl bg-rose-600 px-3 py-1 font-semibold shadow-md transition-all duration-200 hover:bg-[#ffcd93]">
+                <button
+                  className="mx-2 w-24 rounded-xl bg-rose-600 px-3 py-1 font-semibold shadow-md transition-all duration-200 hover:bg-[#ffcd93]"
+                  onClick={() => setIsDeleting(true)}
+                >
                   DELETE
                 </button>
               </div>
               <div className="grid w-full grid-cols-6">
                 {teamMembers.map((pokemon) => (
-                  <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                  <Card pokemon={pokemon} key={pokemon.id} />
                 ))}
               </div>
+              {isDeleting && (
+                <div className="flex w-full justify-center">
+                  <div className="h-5/12 fixed left-1/2 top-1/2 z-50 flex w-1/3 -translate-x-1/2 -translate-y-1/2 transform flex-col rounded-xl border-2 border-stone-600 bg-[#fff2d7] px-5 py-3 text-center drop-shadow-2xl">
+                    <h3 className="font-semibold sm:text-sm lg:text-lg">
+                      Are you sure you want to delete this team?
+                    </h3>
+                    <div>
+                      <button
+                        className="mx-2 my-3 w-24 rounded-xl bg-rose-600 px-3 py-1 font-semibold shadow-md transition-all duration-200 hover:bg-[#ffcd93]"
+                        onClick={() => handleDeleteTeam(teamName)}
+                      >
+                        DELETE
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {isEditing && (
+                <div className="flex w-full justify-center">
+                  <div className="h-5/12 fixed left-1/2 top-1/2 z-50 flex w-1/3 -translate-x-1/2 -translate-y-1/2 transform flex-col rounded-xl border-2 border-stone-600 bg-[#fff2d7] px-5 py-3 text-center drop-shadow-2xl">
+                    <h3 className="font-semibold sm:text-sm lg:text-lg">
+                      Are you sure you want to edit this team?
+                    </h3>
+                    <div>
+                      <button
+                        className="mx-2 w-24 rounded-xl bg-blue-500 px-3 py-1 font-semibold shadow-md transition-all duration-200 hover:bg-[#ffcd93]"
+                        onClick={() => handleDeleteTeam(teamName)}
+                      >
+                        EDIT
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

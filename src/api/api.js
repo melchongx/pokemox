@@ -37,6 +37,24 @@ export async function fetchPokemonData() {
   }
 }
 
+export async function fetchAllPokemonData() {
+  const promises = [];
+  for (let i = 1; i <= 1025; i++) {
+    promises.push(fetch(`${baseUrl}pokemon/${i}`));
+  }
+
+  try {
+    const responseArr = await Promise.all(promises);
+    const pokemonDataArr = await Promise.all(
+      responseArr.map(async (res) => await res.json()),
+    );
+    return pokemonDataArr;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error while fetching pokemonData: ${error.message}`);
+  }
+}
+
 export async function GetPokemon(nameOrId) {
   const response = await fetch(baseUrl + `pokemon/${nameOrId}`);
 
