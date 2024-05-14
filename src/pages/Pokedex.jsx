@@ -1,7 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { GetPaginatedPokemonList, GetPokemon } from "../api/api";
 import { SearchContext, sortPokemonData } from "../helpers";
-// import { useSearchContext } from "../helpers/searchContext";
 import { useNavigate } from "react-router-dom";
 
 import FilterMenu from "../components/FilterMenu";

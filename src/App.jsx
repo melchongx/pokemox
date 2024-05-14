@@ -8,10 +8,13 @@ import Home from "./pages/Home";
 import Pokedex from "./pages/Pokedex";
 import Poketeams from "./pages/Poketeams";
 import PokemonView from "./pages/PokemonView.jsx";
-import CreateTeam from "./pages/CreateTeam.jsx";
-import { SearchProvider } from "./helpers/searchContext";
+// import CreateTeam from "./pages/CreateTeam.jsx";
+import { SearchContext } from "./helpers/index.js";
+import { useState } from "react";
 
 const App = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const data = await fetchAllPokemonData();
@@ -23,8 +26,9 @@ const App = () => {
   //
   //   fetchData();
   // }, []);
+
   return (
-    <SearchProvider>
+    <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
       <Router>
         <Routes>
           <Route path="/" element={<RootLayout />}>
@@ -32,11 +36,11 @@ const App = () => {
             <Route path="/pokedex" element={<Pokedex />} />
             <Route path="/poketeams" element={<Poketeams />} />
             <Route path="/pokedex/pokemonview" element={<PokemonView />} />
-            <Route path="/createteam" element={<CreateTeam />} />
+            {/* <Route path="/createteam" element={<CreateTeam />} /> */}
           </Route>
         </Routes>
       </Router>
-    </SearchProvider>
+    </SearchContext.Provider>
   );
 };
 
