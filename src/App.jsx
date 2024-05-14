@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
-import { fetchAllPokemonData } from "./api/api.js";
-import { pokemons } from "./data/teams.jsx";
+// import { useEffect } from "react";
+// import { fetchAllPokemonData } from "./api/api.js";
+// import { pokemons } from "./data/teams.jsx";
 
 import RootLayout from "./components/RootLayout";
 import Home from "./pages/Home";
@@ -9,6 +9,7 @@ import Pokedex from "./pages/Pokedex";
 import Poketeams from "./pages/Poketeams";
 import PokemonView from "./pages/PokemonView.jsx";
 import CreateTeam from "./pages/CreateTeam.jsx";
+import { SearchProvider } from "./helpers/searchContext";
 
 const App = () => {
   // useEffect(() => {
@@ -23,17 +24,19 @@ const App = () => {
   //   fetchData();
   // }, []);
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/pokedex" element={<Pokedex />} />
-          <Route path="/poketeams" element={<Poketeams />} />
-          <Route path="/pokedex/:slug" element={<PokemonView />} />
-          <Route path="/createteam" element={<CreateTeam />} />
-        </Route>
-      </Routes>
-    </Router>
+    <SearchProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<RootLayout />}>
+            <Route index element={<Home />} />
+            <Route path="/pokedex" element={<Pokedex />} />
+            <Route path="/poketeams" element={<Poketeams />} />
+            <Route path="/pokedex/:slug" element={<PokemonView />} />
+            <Route path="/createteam" element={<CreateTeam />} />
+          </Route>
+        </Routes>
+      </Router>
+    </SearchProvider>
   );
 };
 

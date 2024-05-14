@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchPokemonData, GetPaginatedPokemonList, GetPokemon } from "../api/api";
+import { GetPaginatedPokemonList, GetPokemon } from "../api/api";
 import { sortPokemonData } from "../helpers";
+import { useSearchContext } from "../helpers/searchContext";
 
 import FilterMenu from "../components/FilterMenu";
 import ChevronIcon from "../components/ChevronIcon";
@@ -9,12 +10,14 @@ import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 
 const Pokedex = () => {
-  const isListFetched = useRef(false)
+  const isListFetched = useRef(false);
   const [pokemonData, setPokemonData] = useState([]);
   const [filterVariant, setFilterVariant] = useState("simple");
   const [loading, setLoading] = useState(true);
 
   const [pokemonOffset, setPokemonOffset] = useState(0);
+
+  const { searchQuery } = useSearchContext();
 
   // query states
   const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
@@ -26,20 +29,20 @@ const Pokedex = () => {
       const pokemon = await GetPokemon(item.name);
       setPokemonData((prev) => {
         return sortPokemonData([...prev, pokemon], sortQuery);
-      })
-    })
-  }
+      });
+    });
+  };
 
   useEffect(() => {
     if (isListFetched.current) return;
 
     fetchPokemonList();
-    setPokemonOffset((prev) => (prev + 20));
+    setPokemonOffset((prev) => prev + 20);
     setLoading(false);
 
     return () => {
       isListFetched.current = true;
-    }
+    };
   }, [sortQuery]);
 
   // useEffect(() => {
@@ -51,14 +54,14 @@ const Pokedex = () => {
     setPokemonData([]);
     setLoading(true);
 
-    fetchPokemonList(true)
+    fetchPokemonList(true);
   };
 
   const handleLoadMoreClick = async () => {
     setLoading(true);
 
-    fetchPokemonList()
-    setPokemonOffset((prev) => (prev + 20));
+    fetchPokemonList();
+    setPokemonOffset((prev) => prev + 20);
 
     setLoading(false);
   };
@@ -66,7 +69,7 @@ const Pokedex = () => {
   const handleSortQueryChange = (query) => {
     setSortQuery(query);
     // fetchPokemonList()
-  }
+  };
 
   return (
     <div className="flex flex-col items-center gap-8">
