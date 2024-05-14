@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { GetPaginatedPokemonList, GetPokemon } from "../api/api";
-import { sortPokemonData } from "../helpers";
-import { useSearchContext } from "../helpers/searchContext";
+import { SearchContext, sortPokemonData } from "../helpers";
+// import { useSearchContext } from "../helpers/searchContext";
 import { useNavigate } from "react-router-dom";
 
 import FilterMenu from "../components/FilterMenu";
@@ -18,10 +18,9 @@ const Pokedex = () => {
 
   const [pokemonOffset, setPokemonOffset] = useState(0);
 
-  const { searchQuery } = useSearchContext();
-
   // query states
   const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
+  const { searchQuery } = useContext(SearchContext);
 
   const fetchPokemonList = async (reset = false) => {
     const data = await GetPaginatedPokemonList(reset ? 0 : pokemonOffset);
@@ -48,10 +47,22 @@ const Pokedex = () => {
     };
   }, [sortQuery]);
 
-  // useEffect(() => {
-  //   const updated = sortPokemonData([...pokemonData], sortQuery);
-  //   setPokemonData(updated);
-  // }, [sortQuery]);
+  useEffect(() => {
+    const updated = sortPokemonData([...pokemonData], sortQuery);
+    setPokemonData(updated);
+  }, [sortQuery]);
+
+  // When search value changes,
+  // filter pokemon.name based on search
+  useEffect(() => {
+    console.log(JSON.stringify({ searchQuery }));
+    const filteredData = pokemonData.filter(
+      (pokemon) =>
+        pokemon.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1,
+    );
+
+    setPokemonData(() => filteredData);
+  }, [searchQuery]);
 
   const handleClear = async () => {
     setPokemonData([]);
