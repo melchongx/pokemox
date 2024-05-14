@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
-import { fetchPokemonData } from "../api/api";
+import { useEffect, useRef, useState } from "react";
+import { GetPaginatedPokemonList, GetPokemon } from "../api/api";
 import { sortPokemonData } from "../helpers";
+import { useSearchContext } from "../helpers/searchContext";
+import { useNavigate } from "react-router-dom";
 
 import FilterMenu from "../components/FilterMenu";
 import ChevronIcon from "../components/ChevronIcon";
@@ -9,49 +11,67 @@ import Button from "../components/Button";
 import Spinner from "../components/Spinner";
 
 const Pokedex = () => {
+  const isListFetched = useRef(false);
   const [pokemonData, setPokemonData] = useState([]);
   const [filterVariant, setFilterVariant] = useState("simple");
   const [loading, setLoading] = useState(true);
 
+  const [pokemonOffset, setPokemonOffset] = useState(0);
+
+  const { searchQuery } = useSearchContext();
+
   // query states
   const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchPokemonData();
-      data.sort((a, b) => a.id - b.id);
+  const fetchPokemonList = async (reset = false) => {
+    const data = await GetPaginatedPokemonList(reset ? 0 : pokemonOffset);
 
-      setPokemonData(data);
-      setLoading(false);
+    data.results.map(async (item) => {
+      const pokemon = await GetPokemon(item.name);
+      setPokemonData((prev) => {
+        return sortPokemonData([...prev, pokemon], sortQuery);
+      });
+    });
+  };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isListFetched.current) return;
+
+    fetchPokemonList();
+    setPokemonOffset((prev) => prev + 20);
+    setLoading(false);
+
+    return () => {
+      isListFetched.current = true;
     };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const updated = sortPokemonData([...pokemonData], sortQuery);
-    setPokemonData(updated);
   }, [sortQuery]);
+
+  // useEffect(() => {
+  //   const updated = sortPokemonData([...pokemonData], sortQuery);
+  //   setPokemonData(updated);
+  // }, [sortQuery]);
 
   const handleClear = async () => {
     setPokemonData([]);
     setLoading(true);
-    const data = await fetchPokemonData();
-    setPokemonData(() => {
-      const updated = sortPokemonData([...data], sortQuery);
-      return updated;
-    });
-    setLoading(false);
+
+    fetchPokemonList(true);
   };
 
   const handleLoadMoreClick = async () => {
     setLoading(true);
-    const data = await fetchPokemonData();
-    setPokemonData((prev) => {
-      const updated = sortPokemonData([...prev, ...data], sortQuery);
-      return updated;
-    });
+
+    fetchPokemonList();
+    setPokemonOffset((prev) => prev + 20);
+
     setLoading(false);
+  };
+
+  const handleSortQueryChange = (query) => {
+    setSortQuery(query);
+    // fetchPokemonList()
   };
 
   return (
@@ -62,7 +82,7 @@ const Pokedex = () => {
         variant={filterVariant}
         onClear={handleClear}
         sortQuery={sortQuery}
-        setSortQuery={setSortQuery}
+        setSortQuery={handleSortQueryChange}
       />
 
       <div className="w-full">
@@ -87,9 +107,17 @@ const Pokedex = () => {
       </div>
 
       <div className="flex w-full max-w-4xl flex-wrap justify-center gap-2 pt-4">
-        {pokemonData.length !== 0 &&
+        {pokemonData.length > 0 &&
           pokemonData.map((pokemon) => (
-            <Card pokemon={pokemon} key={pokemon.id} />
+            <a
+              className="hover:cursor-pointer"
+              onClick={() => {
+                navigate("/pokedex/pokemonview", { state: { pokemon } });
+              }}
+              key={pokemon.id}
+            >
+              <Card pokemon={pokemon} />
+            </a>
           ))}
       </div>
 

@@ -18,7 +18,6 @@ const Carousel = ({ pokemons }) => {
         const currentPanel = flicking.current.currentPanel;
         const nextPanel = currentPanel.next();
         const currentElement = nextPanel.element;
-        console.log(currentElement)
 
         // Remove the custom class from all panels
         flicking.current.panels.forEach(panel => {

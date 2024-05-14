@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { GetPokemon } from "../api/api.js";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const PokemonNav = ({ currentId, isBaseForm = true }) => {
   const [baseFormPokemon, setBaseFormPokemon] = useState(null);
   const [previousPokemon, setPreviousPokemon] = useState(null);
   const [nextPokemon, setNextPokemon] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPreviousPokemon = async () => {
@@ -55,8 +57,12 @@ const PokemonNav = ({ currentId, isBaseForm = true }) => {
   return (
     <div className="mb-8 flex justify-between">
       {currentId > 1 && isBaseForm && previousPokemon && (
-        <Link
-          to={`/pokedex/${previousPokemon.name}`}
+        <button
+          onClick={() =>
+            navigate(`/pokedex/pokemonview`, {
+              state: { pokemon: previousPokemon },
+            })
+          }
           className="flex items-center gap-3 rounded-md bg-[#A4A4A4] px-4 py-2 text-left text-white"
         >
           <svg
@@ -77,12 +83,16 @@ const PokemonNav = ({ currentId, isBaseForm = true }) => {
             <span className="font-bold">#{currentId - 1}</span>
             <span className="block capitalize">{previousPokemon.name}</span>
           </div>
-        </Link>
+        </button>
       )}
 
       {!isBaseForm && baseFormPokemon && (
-        <Link
-          to={`/pokedex/${baseFormPokemon.name}`}
+        <button
+          onClick={() =>
+            navigate(`/pokedex/pokemonview`, {
+              state: { pokemon: baseFormPokemon },
+            })
+          }
           className="flex items-center gap-3 rounded-md bg-[#A4A4A4] px-4 py-2 text-left text-white"
         >
           <svg
@@ -103,14 +113,18 @@ const PokemonNav = ({ currentId, isBaseForm = true }) => {
             <span className="font-bold">#{currentId}</span>
             <span className="block capitalize">{baseFormPokemon.name}</span>
           </div>
-        </Link>
+        </button>
       )}
 
       {currentId === 1 && <div />}
 
       {currentId < 1025 && nextPokemon && (
-        <Link
-          to={`/pokedex/${nextPokemon.name}`}
+        <button
+          onClick={() =>
+            navigate(`/pokedex/pokemonview`, {
+              state: { pokemon: nextPokemon },
+            })
+          }
           className="flex items-center gap-3 rounded-md bg-[#A4A4A4] px-4 py-2 text-left text-white"
         >
           <div>
@@ -131,7 +145,7 @@ const PokemonNav = ({ currentId, isBaseForm = true }) => {
           >
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
-        </Link>
+        </button>
       )}
     </div>
   );
