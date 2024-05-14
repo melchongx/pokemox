@@ -11,17 +11,17 @@ import PokemonView from "./pages/PokemonView.jsx";
 import CreateTeam from "./pages/CreateTeam.jsx";
 
 const App = () => {
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchAllPokemonData();
-      data.sort((a, b) => a.id - b.id);
-
-      pokemons.push(data);
-      console.log(pokemons);
-    };
-
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await fetchAllPokemonData();
+  //     data.sort((a, b) => a.id - b.id);
+  //
+  //     pokemons.push(data);
+  //     console.log(pokemons);
+  //   };
+  //
+  //   fetchData();
+  // }, []);
   return (
     <Router>
       <Routes>

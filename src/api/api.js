@@ -55,6 +55,18 @@ export async function fetchAllPokemonData() {
   }
 }
 
+export async function GetPaginatedPokemonList(offset = 20) {
+  const response = await fetch(
+    baseUrl + `pokemon?offset=${offset}`,
+  );
+
+  if (!response.ok) {
+    throw new Error("Error fetching Pokémon list");
+  }
+
+  return response.json();
+}
+
 export async function GetPokemon(nameOrId) {
   const response = await fetch(baseUrl + `pokemon/${nameOrId}`);
 
