@@ -1,7 +1,8 @@
-import { useSearchContext } from "../helpers/searchContext";
+import { useContext } from "react";
+import { SearchContext } from "../helpers";
 
 const Search = () => {
-  const { setSearchQuery } = useSearchContext();
+  const { searchQuery, setSearchQuery } = useContext(SearchContext);
 
   return (
     <div className="relative flex items-center">
@@ -24,6 +25,7 @@ const Search = () => {
         type="text"
         placeholder="SEARCH FOR POKEMON"
         className="lg:text-md rounded-2xl border-2 border-[#31241e] bg-transparent px-12 py-2 text-center  text-[#31241e] placeholder:text-[#31241e60] sm:text-sm"
+        value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
     </div>

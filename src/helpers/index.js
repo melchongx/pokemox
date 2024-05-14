@@ -1,3 +1,5 @@
+import { createContext } from "react";
+
 const generateRandomPokemonId = () => {
   return Math.floor(Math.random() * 1025) + 1;
 };
@@ -37,4 +39,6 @@ const sortPokemonData = (dataArr, sortBy) => {
   return updatedArr;
 };
 
-export { generateRandomPokemonId, padStartId, sortPokemonData };
+const SearchContext = createContext();
+
+export { generateRandomPokemonId, padStartId, sortPokemonData, SearchContext };
