@@ -6,7 +6,9 @@ const PokemonCard = ({ pokemon }) => {
         src={pokemon.sprites.front_shiny}
         alt={pokemon.name}
       />
-      <h2 className="text-lg font-bold">{pokemon.name.toUpperCase()}</h2>
+      <h2 className="font-semibold sm:text-sm lg:text-lg">
+        {pokemon.name.toUpperCase()}
+      </h2>
     </div>
   );
 };

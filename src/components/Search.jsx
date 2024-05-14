@@ -19,7 +19,7 @@ const Search = () => {
       <input
         type="text"
         placeholder="SEARCH FOR POKEMON"
-        className="rounded-2xl border-2 border-[#31241e] bg-transparent px-12 py-2 text-center text-[#31241e] placeholder:text-[#31241e60]"
+        className="lg:text-md rounded-2xl border-2 border-[#31241e] bg-transparent px-12 py-2 text-center  text-[#31241e] placeholder:text-[#31241e60] sm:text-sm"
       />
     </div>
   );
