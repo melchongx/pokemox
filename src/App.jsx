@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import Pokedex from "./pages/Pokedex";
 import Poketeams from "./pages/Poketeams";
 import PokemonView from "./pages/PokemonView.jsx";
-import CreateTeam from "./pages/CreateTeam.jsx";
+// import EditTeam from "./pages/EditTeam.jsx";
 
 const App = () => {
   useEffect(() => {
@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/pokedex" element={<Pokedex />} />
           <Route path="/poketeams" element={<Poketeams />} />
           <Route path="/pokedex/:slug" element={<PokemonView />} />
-          <Route path="/createteam" element={<CreateTeam />} />
+          {/* <Route path="/poketeams/editteam" element={<EditTeam />} /> */}
         </Route>
       </Routes>
     </Router>

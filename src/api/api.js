@@ -39,7 +39,7 @@ export async function fetchPokemonData() {
 
 export async function fetchAllPokemonData() {
   const promises = [];
-  for (let i = 1; i <= 1025; i++) {
+  for (let i = 1; i <= 10; i++) {
     promises.push(fetch(`${baseUrl}pokemon/${i}`));
   }
 

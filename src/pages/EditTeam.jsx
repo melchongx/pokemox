@@ -5,7 +5,7 @@ import Card from "../components/Card";
 import SmallCard from "../components/SmallCard";
 import { useNavigate } from "react-router-dom";
 
-const CreateTeam = () => {
+const EditTeam = () => {
   const [teamName, setTeamName] = useState("");
   const [pokemonData, setPokemonData] = useState([]);
   const [currentTeam, setCurrentTeam] = useState([]);
@@ -113,4 +113,4 @@ const CreateTeam = () => {
   );
 };
 
-export default CreateTeam;
+export default EditTeam;
