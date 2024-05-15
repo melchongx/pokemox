@@ -11,6 +11,7 @@ const FilterMenu = ({
   setSortQuery,
   typeQuery,
   setTypeQuery,
+  resetFilter,
 }) => {
   if (variant === "simple") {
     return (
@@ -88,6 +89,12 @@ const FilterMenu = ({
                 onSelect={setSortQuery}
               />
             </div>
+          </FilterRow>
+
+          <FilterRow className="mt-4">
+            <Button className="basis-24" onClick={resetFilter}>
+              Reset
+            </Button>
           </FilterRow>
         </div>
       </div>

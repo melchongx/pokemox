@@ -87,6 +87,10 @@ const Pokedex = () => {
     setSortQuery(query);
   };
 
+  const resetFilter = () => {
+    setTypeQuery(null);
+  };
+
   return (
     <div className="flex flex-col items-center gap-8">
       <h1 className="text-3xl font-bold uppercase italic">Pokedex</h1>
@@ -98,6 +102,7 @@ const Pokedex = () => {
         setSortQuery={handleSortQueryChange}
         typeQuery={typeQuery}
         setTypeQuery={setTypeQuery}
+        resetFilter={resetFilter}
       />
 
       <div className="w-full">
