@@ -21,6 +21,7 @@ const Pokedex = () => {
   // query states
   const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
   const { searchQuery } = useContext(SearchContext);
+  const [typeQuery, setTypeQuery] = useState(null);
 
   const fetchPokemonList = async (reset = false) => {
     const data = await GetPaginatedPokemonList(reset ? 0 : pokemonOffset);
@@ -48,26 +49,27 @@ const Pokedex = () => {
     };
   }, []);
 
-  // debugging purposes
-  useEffect(() => {
-    console.log(
-      JSON.stringify(
-        { pokemonOffset, pokemonDataLength: pokemonData.length },
-        null,
-        2,
-      ),
-    );
-  }, [pokemonOffset, pokemonData]);
-
   useEffect(() => {
     const sorted = sortPokemonData([...pokemonData], sortQuery);
-    const searched = sorted.filter(
+    let searched = sorted.filter(
       (pokemon) =>
         pokemon.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1,
     );
 
+    console.log({ typeQuery });
+
+    if (typeQuery) {
+      searched = searched.filter((pokemon) => {
+        console.log(JSON.stringify({ pokemon: pokemon.types }, null, 2));
+
+        const typesOfThisPokemon = pokemon.types.map((type) => type.type.name);
+        console.log(JSON.stringify({ typesOfThisPokemon }, null, 2));
+        return typesOfThisPokemon.includes(typeQuery.toLowerCase());
+      });
+    }
+
     setFilteredData(searched);
-  }, [sortQuery, pokemonData, searchQuery]);
+  }, [sortQuery, pokemonData, searchQuery, typeQuery]);
 
   const handleClear = async () => {
     setPokemonData([]);
@@ -99,6 +101,8 @@ const Pokedex = () => {
         onClear={handleClear}
         sortQuery={sortQuery}
         setSortQuery={handleSortQueryChange}
+        typeQuery={typeQuery}
+        setTypeQuery={setTypeQuery}
       />
 
       <div className="w-full">

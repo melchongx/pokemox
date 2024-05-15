@@ -1,26 +1,17 @@
-import { useState } from "react";
 import { types } from "../constants";
 
 import DropdownMenu from "./DropdownMenu";
 import FilterRow from "./FilterRow";
 import Button from "./Button";
 
-const FilterMenu = ({ variant, onClear, sortQuery, setSortQuery }) => {
-  const [typeQuery, setTypeQuery] = useState(null);
-  const [numberQuery, setNumberQuery] = useState({ start: 1, end: 1025 });
-
-  const handleNumberChange = (number, field = "start") => {
-    if (number < 1 || number > 1025) {
-      return;
-    }
-
-    if (field === "start") {
-      setNumberQuery((prev) => ({ ...prev, start: number }));
-    } else {
-      setNumberQuery((prev) => ({ ...prev, end: number }));
-    }
-  };
-
+const FilterMenu = ({
+  variant,
+  onClear,
+  sortQuery,
+  setSortQuery,
+  typeQuery,
+  setTypeQuery,
+}) => {
   if (variant === "simple") {
     return (
       <div className="w-full max-w-2xl text-stone-700">
@@ -85,32 +76,6 @@ const FilterMenu = ({ variant, onClear, sortQuery, setSortQuery }) => {
 
           <FilterRow>
             <label
-              htmlFor="pokemonNumber"
-              className="flex basis-72 items-center gap-2 font-semibold uppercase min-[696px]:justify-end"
-            >
-              Number Range{" "}
-              <span className="text-xs font-normal">( 1-1025 )</span>
-            </label>
-            <div className="flex flex-none basis-72 items-center gap-3">
-              <input
-                type="number"
-                id="pokemonNumber"
-                value={numberQuery.start}
-                onChange={(e) => handleNumberChange(e.target.value, "start")}
-                className="flex w-full flex-1 items-center rounded-lg border border-neutral-600 bg-[#F5F3F5] px-3 py-1 text-left"
-              />
-              <span className="flex-none">-</span>
-              <input
-                type="number"
-                value={numberQuery.end}
-                onChange={(e) => handleNumberChange(e.target.value, "end")}
-                className="flex w-full flex-1 items-center rounded-lg border border-neutral-600 bg-[#F5F3F5] px-3 py-1 text-left"
-              />
-            </div>
-          </FilterRow>
-
-          <FilterRow>
-            <label
               htmlFor="sortBy"
               className="flex basis-72 items-center font-semibold uppercase min-[696px]:justify-end"
             >
@@ -123,11 +88,6 @@ const FilterMenu = ({ variant, onClear, sortQuery, setSortQuery }) => {
                 onSelect={setSortQuery}
               />
             </div>
-          </FilterRow>
-
-          <FilterRow className="mt-4">
-            <Button className="basis-24">Reset</Button>
-            <Button className="basis-24">Search</Button>
           </FilterRow>
         </div>
       </div>
