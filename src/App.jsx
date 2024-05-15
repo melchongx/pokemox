@@ -15,18 +15,6 @@ import { useState } from "react";
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await fetchAllPokemonData();
-  //     data.sort((a, b) => a.id - b.id);
-  //
-  //     pokemons.push(data);
-  //     console.log(pokemons);
-  //   };
-  //
-  //   fetchData();
-  // }, []);
-
   return (
     <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
       <Router>

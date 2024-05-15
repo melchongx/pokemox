@@ -56,14 +56,9 @@ const Pokedex = () => {
         pokemon.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1,
     );
 
-    console.log({ typeQuery });
-
     if (typeQuery) {
       searched = searched.filter((pokemon) => {
-        console.log(JSON.stringify({ pokemon: pokemon.types }, null, 2));
-
         const typesOfThisPokemon = pokemon.types.map((type) => type.type.name);
-        console.log(JSON.stringify({ typesOfThisPokemon }, null, 2));
         return typesOfThisPokemon.includes(typeQuery.toLowerCase());
       });
     }
