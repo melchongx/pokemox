@@ -12,6 +12,7 @@ import Spinner from "../components/Spinner";
 const Pokedex = () => {
   const isListFetched = useRef(false);
   const [pokemonData, setPokemonData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [filterVariant, setFilterVariant] = useState("simple");
   const [loading, setLoading] = useState(true);
 
@@ -20,6 +21,7 @@ const Pokedex = () => {
   // query states
   const [sortQuery, setSortQuery] = useState("number"); // enum: number, name, type
   const { searchQuery } = useContext(SearchContext);
+  const [typeQuery, setTypeQuery] = useState(null);
 
   const fetchPokemonList = async (reset = false) => {
     const data = await GetPaginatedPokemonList(reset ? 0 : pokemonOffset);
@@ -27,7 +29,8 @@ const Pokedex = () => {
     data.results.map(async (item) => {
       const pokemon = await GetPokemon(item.name);
       setPokemonData((prev) => {
-        return sortPokemonData([...prev, pokemon], sortQuery);
+        return [...prev, pokemon];
+        // return sortPokemonData([...prev, pokemon], sortQuery);
       });
     });
   };
@@ -38,50 +41,55 @@ const Pokedex = () => {
     if (isListFetched.current) return;
 
     fetchPokemonList();
-    setPokemonOffset((prev) => prev + 20);
+    setPokemonOffset((prev) => prev + 500);
     setLoading(false);
 
     return () => {
       isListFetched.current = true;
     };
-  }, [sortQuery]);
+  }, []);
 
   useEffect(() => {
-    const updated = sortPokemonData([...pokemonData], sortQuery);
-    setPokemonData(updated);
-  }, [sortQuery]);
-
-  // When search value changes,
-  // filter pokemon.name based on search
-  useEffect(() => {
-    console.log(JSON.stringify({ searchQuery }));
-    const filteredData = pokemonData.filter(
+    const sorted = sortPokemonData([...pokemonData], sortQuery);
+    let searched = sorted.filter(
       (pokemon) =>
         pokemon.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1,
     );
 
-    setPokemonData(() => filteredData);
-  }, [searchQuery]);
+    console.log({ typeQuery });
+
+    if (typeQuery) {
+      searched = searched.filter((pokemon) => {
+        console.log(JSON.stringify({ pokemon: pokemon.types }, null, 2));
+
+        const typesOfThisPokemon = pokemon.types.map((type) => type.type.name);
+        console.log(JSON.stringify({ typesOfThisPokemon }, null, 2));
+        return typesOfThisPokemon.includes(typeQuery.toLowerCase());
+      });
+    }
+
+    setFilteredData(searched);
+  }, [sortQuery, pokemonData, searchQuery, typeQuery]);
 
   const handleClear = async () => {
     setPokemonData([]);
     setLoading(true);
 
     fetchPokemonList(true);
+    setLoading(false);
   };
 
   const handleLoadMoreClick = async () => {
     setLoading(true);
 
     fetchPokemonList();
-    setPokemonOffset((prev) => prev + 20);
+    setPokemonOffset((prev) => prev + 500);
 
     setLoading(false);
   };
 
   const handleSortQueryChange = (query) => {
     setSortQuery(query);
-    // fetchPokemonList()
   };
 
   return (
@@ -93,6 +101,8 @@ const Pokedex = () => {
         onClear={handleClear}
         sortQuery={sortQuery}
         setSortQuery={handleSortQueryChange}
+        typeQuery={typeQuery}
+        setTypeQuery={setTypeQuery}
       />
 
       <div className="w-full">
@@ -118,7 +128,7 @@ const Pokedex = () => {
 
       <div className="flex w-full max-w-4xl flex-wrap justify-center gap-2 pt-4">
         {pokemonData.length > 0 &&
-          pokemonData.map((pokemon) => (
+          filteredData.map((pokemon) => (
             <a
               className="hover:cursor-pointer"
               onClick={() => {

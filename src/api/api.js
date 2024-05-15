@@ -39,7 +39,7 @@ export async function fetchPokemonData() {
 
 export async function fetchAllPokemonData() {
   const promises = [];
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 1000; i++) {
     promises.push(fetch(`${baseUrl}pokemon/${i}`));
   }
 
@@ -55,10 +55,8 @@ export async function fetchAllPokemonData() {
   }
 }
 
-export async function GetPaginatedPokemonList(offset = 20) {
-  const response = await fetch(
-    baseUrl + `pokemon?offset=${offset}`,
-  );
+export async function GetPaginatedPokemonList(offset = 500) {
+  const response = await fetch(baseUrl + `pokemon?offset=${offset}&limit=500`);
 
   if (!response.ok) {
     throw new Error("Error fetching Pokémon list");
