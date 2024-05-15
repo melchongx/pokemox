@@ -12,6 +12,7 @@ import Spinner from "../components/Spinner";
 const Pokedex = () => {
   const isListFetched = useRef(false);
   const [pokemonData, setPokemonData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [filterVariant, setFilterVariant] = useState("simple");
   const [loading, setLoading] = useState(true);
 
@@ -27,7 +28,8 @@ const Pokedex = () => {
     data.results.map(async (item) => {
       const pokemon = await GetPokemon(item.name);
       setPokemonData((prev) => {
-        return sortPokemonData([...prev, pokemon], sortQuery);
+        return [...prev, pokemon];
+        // return sortPokemonData([...prev, pokemon], sortQuery);
       });
     });
   };
@@ -38,50 +40,54 @@ const Pokedex = () => {
     if (isListFetched.current) return;
 
     fetchPokemonList();
-    setPokemonOffset((prev) => prev + 20);
+    setPokemonOffset((prev) => prev + 500);
     setLoading(false);
 
     return () => {
       isListFetched.current = true;
     };
-  }, [sortQuery]);
+  }, []);
+
+  // debugging purposes
+  useEffect(() => {
+    console.log(
+      JSON.stringify(
+        { pokemonOffset, pokemonDataLength: pokemonData.length },
+        null,
+        2,
+      ),
+    );
+  }, [pokemonOffset, pokemonData]);
 
   useEffect(() => {
-    const updated = sortPokemonData([...pokemonData], sortQuery);
-    setPokemonData(updated);
-  }, [sortQuery]);
-
-  // When search value changes,
-  // filter pokemon.name based on search
-  useEffect(() => {
-    console.log(JSON.stringify({ searchQuery }));
-    const filteredData = pokemonData.filter(
+    const sorted = sortPokemonData([...pokemonData], sortQuery);
+    const searched = sorted.filter(
       (pokemon) =>
         pokemon.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1,
     );
 
-    setPokemonData(() => filteredData);
-  }, [searchQuery]);
+    setFilteredData(searched);
+  }, [sortQuery, pokemonData, searchQuery]);
 
   const handleClear = async () => {
     setPokemonData([]);
     setLoading(true);
 
     fetchPokemonList(true);
+    setLoading(false);
   };
 
   const handleLoadMoreClick = async () => {
     setLoading(true);
 
     fetchPokemonList();
-    setPokemonOffset((prev) => prev + 20);
+    setPokemonOffset((prev) => prev + 500);
 
     setLoading(false);
   };
 
   const handleSortQueryChange = (query) => {
     setSortQuery(query);
-    // fetchPokemonList()
   };
 
   return (
@@ -118,7 +124,7 @@ const Pokedex = () => {
 
       <div className="flex w-full max-w-4xl flex-wrap justify-center gap-2 pt-4">
         {pokemonData.length > 0 &&
-          pokemonData.map((pokemon) => (
+          filteredData.map((pokemon) => (
             <a
               className="hover:cursor-pointer"
               onClick={() => {

@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Card from "../components/Card";
 import { fetchAllPokemonData } from "../api/api";
 import SmallCard from "../components/SmallCard";
+import { SearchContext } from "../helpers";
 
 const Poketeams = () => {
   const [pokemonData, setPokemonData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [createPokemonData, setCreatePokemonData] = useState([]);
 
   const [isCreating, setIsCreating] = useState(false);
@@ -16,6 +18,17 @@ const Poketeams = () => {
 
   const [editingTeamName, setEditingTeamName] = useState("");
   const [editingTeamIndex, setEditingTeamIndex] = useState(-1);
+
+  const { searchQuery } = useContext(SearchContext);
+
+  useEffect(() => {
+    const searched = createPokemonData.filter(
+      (pokemon) =>
+        pokemon.name.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1,
+    );
+
+    setFilteredData(searched);
+  }, [searchQuery, createPokemonData]);
 
   function isTeamsEmpty() {
     if (pokemonData.length <= 0) {
@@ -206,7 +219,7 @@ const Poketeams = () => {
               <h3 className="invisible text-xl font-semibold italic">filler</h3>
               <div className="flex w-full flex-wrap justify-center gap-2 pt-4">
                 {createPokemonData.length !== 0 &&
-                  createPokemonData.map((pokemon) => (
+                  filteredData.map((pokemon) => (
                     <div key={pokemon.id}>
                       <Card pokemon={pokemon} />
                       <button
