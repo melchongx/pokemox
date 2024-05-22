@@ -12,7 +12,7 @@ const Search = () => {
         viewBox="0 0 24 24"
         strokeWidth={2}
         stroke="currentColor"
-        className="absolute ml-4 h-6 w-6"
+        className="absolute ml-4 hidden h-6 w-6 sm:inline"
       >
         <path
           strokeLinecap="round"
@@ -24,7 +24,7 @@ const Search = () => {
       <input
         type="text"
         placeholder="SEARCH FOR POKEMON"
-        className="lg:text-md rounded-2xl border-2 border-[#31241e] bg-transparent px-12 py-2 text-center  text-[#31241e] placeholder:text-[#31241e60] sm:text-sm"
+        className="w-full rounded-2xl border-2 border-[#31241e] bg-transparent px-6 py-2 text-center text-sm text-[#31241e] placeholder:text-[#31241e60] sm:px-12 lg:text-base"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
