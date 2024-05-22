@@ -5,7 +5,7 @@ import Footer from "./Footer";
 
 const RootLayout = () => {
   return (
-    <div className="font-montserrat flex min-h-screen flex-col text-[#31241e]">
+    <div className="flex min-h-screen flex-col font-montserrat text-[#31241e]">
       <Header />
 
       <main className="flex-grow bg-[#fff2d7] px-12 py-8">
