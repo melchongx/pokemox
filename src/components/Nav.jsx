@@ -55,11 +55,11 @@ const Nav = () => {
       {showHamburgerNav && (
         <>
           <div
-            className="absolute bottom-0 left-0 right-0 top-0 bg-black opacity-25"
+            className="absolute left-0 right-0 top-0 z-50 h-screen bg-black opacity-25"
             onClick={() => setShowHamburgerNav(false)}
           />
 
-          <div className="absolute bottom-0 right-0 top-0 flex flex-col items-center justify-center bg-red-400 px-10 shadow-2xl">
+          <div className="absolute right-0 top-0 z-[2000] flex h-screen flex-col items-center justify-center bg-red-400 px-10 shadow-2xl">
             <ul className="flex flex-col items-center justify-center space-y-1 text-xl uppercase">
               {paths.map((path) => (
                 <li key={path.href}>
