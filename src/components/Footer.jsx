@@ -1,4 +1,4 @@
-import NavLink from "./NavLink";
+import { NavLink as ReactRouterNavLink } from "react-router-dom";
 
 const Footer = () => {
   const paths = [
@@ -17,7 +17,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#ffaf61] px-12 py-10">
+    <footer className="bg-[#ffaf61] px-12 py-10 text-[rgba(0,0,0,0.5)]">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-8">
         <div>
           <h1 className="text-2xl font-bold">The Pokemox Corporation</h1>
@@ -28,7 +28,12 @@ const Footer = () => {
           <ul className="flex flex-col items-end justify-center space-y-1 text-sm sm:text-base">
             {paths.map((path) => (
               <li key={path.href}>
-                <NavLink href={path.href} text={path.text} />
+                <ReactRouterNavLink
+                  to={path.href}
+                  className="border-b border-[rgba(0,0,0,0.5)]"
+                >
+                  {path.text}
+                </ReactRouterNavLink>
               </li>
             ))}
           </ul>
